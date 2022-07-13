@@ -2,6 +2,8 @@ const express = require('express');//importation express
 const mongoose = require('mongoose');// package pour faciliter interactions avec MongoBd
 const app = express();// permet la création d'une application express
 
+const postsRoutes = require('./routes/posts');//importer le router pour les sauces
+const userRoutes = require('./routes/user');
 
 mongoose.connect('mongodb+srv://carotte:2022.Vega@cluster1.g7anlk0.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -27,27 +29,7 @@ app.use((req, res, next) => {
   });
 
   
-
-  app.get('/api/posts', (req, res, next) => {
-    const stuff = [
-      {
-        _id: 'oeihfzeoi',
-        title: 'Mon premier objet',
-        description: 'Les infos de mon premier objet',
-        imageUrl: '',
-        price: 4900,
-        userId: 'qsomihvqios',
-      },
-      {
-        _id: 'oeihfzeomoihi',
-        title: 'Mon deuxième objet',
-        description: 'Les infos de mon deuxième objet',
-        imageUrl: '',
-        price: 2900,
-        userId: 'qsomihvqios',
-      },
-    ];
-    res.status(200).json(stuff);
-  });
+  app.use("/api/posts", postsRoutes);
+  app.use("/api/auth", userRoutes);
 
 module.exports = app;
