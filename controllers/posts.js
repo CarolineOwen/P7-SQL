@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const User = require('../models/User');
 const fs = require("fs");
 
 //fonction creer un post
@@ -8,6 +9,7 @@ exports.createPost = (req, res, next) => {
     delete postObject._userId;
     const post = new Post({
       ...postObject,
+      
       userId: req.auth.userId,
       //generer l'url de l'image
       if (imageUrl){
@@ -23,10 +25,21 @@ exports.createPost = (req, res, next) => {
       .catch((error) => {
         res.status(400).json({ error });
       });
-  };
+};
   
   //fonction modifier un post
   exports.modifyPost = (req, res, next) => {
+    if(req.file){
+        Post.findOne({ _id: req.params.id })
+        .then((objet)=> {
+            const filename= objet.imageUrl.split('/images')[1];
+            fs.unlink(`images/${filename}`, (error) =>{
+                if(error) throw error;
+            })
+        })
+        .catch((error) => res.status(404).json({ error }));
+    }else{console.log("FALSE")}
+    
     const postObject = req.file
       ? {
           ...JSON.parse(req.body.post),
