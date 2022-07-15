@@ -1,11 +1,15 @@
 const express = require('express');//importation express
-const mongoose = require('mongoose');// package pour faciliter interactions avec MongoBd
-const app = express();// permet la création d'une application express
 
+const app = express();// permet la création d'une application express
+const helmet = require("helmet"); //Helmet aide a securiser l'API en configurant de maniere approprié des headers HTTP
+const mongoose = require('mongoose');// package pour faciliter interactions avec MongoBd
+const path = require("path");
+const dotenv = require('dotenv');
+const result = dotenv.config();
 const postsRoutes = require('./routes/posts');//importer le router pour les sauces
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://carotte:2022.Vega@cluster1.g7anlk0.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster1.g7anlk0.mongodb.net/?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -13,6 +17,7 @@ mongoose.connect('mongodb+srv://carotte:2022.Vega@cluster1.g7anlk0.mongodb.net/?
 
 
 app.use(express.json());//rend les données du corps de la requête exploitables, le formate pour en faciliter l'exploitation
+app.use(helmet());
 
 //CORS: middleware appliqué à toute les requetes pour les passer sans problème, on rajoute des headers à toutes les réponses
 app.use((req, res, next) => {
@@ -31,5 +36,6 @@ app.use((req, res, next) => {
   
   app.use("/api/posts", postsRoutes);
   app.use("/api/auth", userRoutes);
+  app.use("/images", express.static(path.join(__dirname, "images")));
 
 module.exports = app;

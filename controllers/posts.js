@@ -10,9 +10,10 @@ exports.createPost = (req, res, next) => {
       ...postObject,
       userId: req.auth.userId,
       //generer l'url de l'image
+      if (imageUrl){
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
-      }`,
+      }`},
     });
     post
       .save()//enregistrer le fichier dans la base de données
