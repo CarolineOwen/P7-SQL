@@ -1,5 +1,4 @@
 const Post = require('../models/Post');
-const User = require('../models/User');
 const fs = require("fs");
 
 //fonction creer un post
@@ -12,10 +11,10 @@ exports.createPost = (req, res, next) => {
       
       userId: req.auth.userId,
       //generer l'url de l'image
-      if (imageUrl){
+      
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
-      }`},
+      }`,
     });
     post
       .save()//enregistrer le fichier dans la base de données

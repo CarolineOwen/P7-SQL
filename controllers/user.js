@@ -14,7 +14,10 @@ exports.signup = (req, res, next) => {
       });
       user
         .save() //enregistrer le user dans la base de données
-        .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
+        .then(() => res.status(201).json({ userId: user._id,
+          //fonction sign qui encode les données qu'on veut encoder avec clé d'encodage et expiration du token
+          token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+            expiresIn: "24h" })}))
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
