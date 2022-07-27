@@ -3,27 +3,24 @@ const fs = require("fs");
 
 //fonction creer un post
 exports.createPost = (req, res, next) => {
-    const postObject = JSON.parse(req.body.post);
-    delete postObject._id;
-    delete postObject._userId;
-    const post = new Post({
-      ...postObject,
+  let data={
+    comments :req.body.comments,
+    userId: req.auth.userId
+  }
+  if(req.file){
+    data.imageUrl=`${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+  }
+
+  const post = new Post(data);
       
-      userId: req.auth.userId,
-      //generer l'url de l'image
-      
-      imageUrl: `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
-      }`,
+  post
+    .save()//enregistrer le fichier dans la base de données
+    .then(() => {
+      res.status(201).json({ message: "Post enregistré !" });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
     });
-    post
-      .save()//enregistrer le fichier dans la base de données
-      .then(() => {
-        res.status(201).json({ message: "Post enregistré !" });
-      })
-      .catch((error) => {
-        res.status(400).json({ error });
-      });
 };
   
   //fonction modifier un post
@@ -90,7 +87,7 @@ exports.createPost = (req, res, next) => {
   
   //fonction obtenir toutes les posts
   exports.getAllPosts = (req, res, next) => {
-    Post.find()
+    Post.find({},null, {sort:{"createdAt":"desc"}})
       .then((posts) => res.status(200).json(posts))
       .catch((error) => res.status(400).json({ error }));
   };

@@ -5,7 +5,7 @@ const multer = require("../middleware/multer-config");
 
 const postsCtrl = require('../controllers/posts');
 
-router.post("/", multer, postsCtrl.createPost); // appliquer la fonction à la route, auth pour autentifer la route
+router.post("/", auth, multer, postsCtrl.createPost); // appliquer la fonction à la route, auth pour autentifer la route
 
 router.put("/:id", auth, multer, postsCtrl.modifyPost);
 
