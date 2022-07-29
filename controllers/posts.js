@@ -34,7 +34,7 @@ exports.createPost = (req, res, next) => {
             })
         })
         .catch((error) => res.status(404).json({ error }));
-    }else{console.log("FALSE")}
+    }else{console.log("cet objet n'existe pas")}
     
     const postObject = req.file
       ? {
