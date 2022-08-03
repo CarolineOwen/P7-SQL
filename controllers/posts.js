@@ -25,28 +25,36 @@ exports.createPost = (req, res, next) => {
   
   //fonction modifier un post
   exports.modifyPost = (req, res, next) => {
+   
+    
     if(req.file){
         Post.findOne({ _id: req.params.id })
         .then((objet)=> {
+          if(objet.imageUrl){
             const filename= objet.imageUrl.split('/images')[1];
             fs.unlink(`images/${filename}`, (error) =>{
                 if(error) throw error;
             })
+          }
         })
-        .catch((error) => res.status(404).json({ error }));
+        .catch((error) => {
+          console.log(error)
+          res.status(404).json({ error })
+        });
     }else{console.log("cet objet n'existe pas")}
-    
-    const postObject = req.file
+    console.log(req.body.image==="")
+    let postObject = req.file
       ? {
-          ...JSON.parse(req.body.post),
-          imageUrl: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
+         comments: req.body.comments,
+          imageUrl: `${req.protocol}://${req.get("host")}/images/${ req.file.filename}`,
         }
-      : { ...req.body };
+      : { comments:req.body.comments };
+    if(req.body.image===""){
+      postObject.imageUrl = null;
+    }
     Post.updateOne(
       { _id: req.params.id },
-      { ...postObject, _id: req.params.id }
+      { ...postObject}
     )
       .then(() => res.status(200).json({ message: "Objet modifié" }))
       .catch((error) => res.status(401).json({ error }));
@@ -55,24 +63,30 @@ exports.createPost = (req, res, next) => {
   //fonction supprimer un post
   exports.deletePost = (req, res, next) => {
     //recupérer l'objet en base
+    console.log("cet objet n'existe point")
     Post.findOne({ _id: req.params.id })
       .then((post) => {
         //vérifier que c'est bien le userId qui veut supprimer l'image
         if (post.userId != req.auth.userId) {
           res.status(401).json({ message: "Non-autorisé" });
         } else {
+          let data={
+            comments :req.body.comments,
+            userId: req.auth.userId
+          }
           //recuperer le nom de fichier
-          const filename = post.imageUrl.split("/images")[1];
+          
           //unlink permet de supprimer le fichier
-          fs.unlink(`images/${filename}`, () => {
+          if(req.file){
+            const filename = post.imageUrl.split("/images")[1];
+          fs.unlink(`images/${filename}`)} 
             //supprimer le fichier dans la base de données
-            Post.deleteOne({ _id: req.params.id })
+          Post.deleteOne({ _id: req.params.id })
               .then(() => {
                 res.status(200).json({ message: "objet supprimé" });
               })
               .catch((error) => res.status(401).json({ error }));
-          });
-        }
+                  }
       })
       .catch((error) => res.status(500).json({ error }));
   };
@@ -92,7 +106,6 @@ exports.createPost = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }));
   };
   
-  //fonction pour aimer ou pas aimer les posts
   exports.likesAndDislikes = (req, res, next) => {
     Post.findOne({ _id: req.params.id })
       .then((post) => {
@@ -110,7 +123,7 @@ exports.createPost = (req, res, next) => {
             .catch((error) => res.status(404).json({ error }));
         }
         //like = 0
-        if (post.usersLiked.includes(req.body.userId) && req.body.like === 0) {
+        if (post.usersLiked.includes(req.body.userId) && req.body.like === 1) {
           Post.updateOne(
             { _id: req.params.id },
             {
@@ -139,7 +152,7 @@ exports.createPost = (req, res, next) => {
         //like = 0 après un like -1(enlever le dislike)
         if (
           post.usersDisliked.includes(req.body.userId) &&
-          req.body.like === 0
+          req.body.like === -1
         ) {
           Post.updateOne(
             { _id: req.params.id },
