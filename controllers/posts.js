@@ -63,13 +63,13 @@ exports.createPost = (req, res, next) => {
   //fonction supprimer un post
   exports.deletePost = (req, res, next) => {
     //recupérer l'objet en base
-    console.log("cet objet n'existe point")
     Post.findOne({ _id: req.params.id })
       .then((post) => {
         //vérifier que c'est bien le userId qui veut supprimer l'image
-        if (post.userId != req.auth.userId) {
-          res.status(401).json({ message: "Non-autorisé" });
-        } else {
+        //if (post.userId != req.auth.userId) {
+         // res.status(401).json({ message: "Non-autorisé" });} else
+        
+      
           let data={
             comments :req.body.comments,
             userId: req.auth.userId
@@ -86,8 +86,8 @@ exports.createPost = (req, res, next) => {
                 res.status(200).json({ message: "objet supprimé" });
               })
               .catch((error) => res.status(401).json({ error }));
-                  }
-      })
+                  })
+     
       .catch((error) => res.status(500).json({ error }));
   };
   
