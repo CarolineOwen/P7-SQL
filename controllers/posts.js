@@ -26,7 +26,6 @@ exports.createPost = (req, res, next) => {
   //fonction modifier un post
   exports.modifyPost = (req, res, next) => {
    
-    
     if(req.file){
         Post.findOne({ _id: req.params.id })
         .then((objet)=> {
