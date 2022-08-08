@@ -10,14 +10,19 @@ exports.signup = (req, res, next) => {
     .then((hash) => {
       const user = new User({
         email: req.body.email,
+        pseudo: req.body.pseudo,
         password: hash,
       });
       user
         .save() //enregistrer le user dans la base de données
-        .then(() => res.status(201).json({ userId: user._id,
+        .then(() => res.status(201).json({
+          userId: user._id,
+          pseudo: user.pseudo,
           //fonction sign qui encode les données qu'on veut encoder avec clé d'encodage et expiration du token
-          token: jwt.sign({ userId: user._id}, "RANDOM_TOKEN_SECRET", {
-            expiresIn: "24h" })}))
+          token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+            expiresIn: "24h"
+          })
+        }))
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
@@ -45,6 +50,8 @@ exports.login = (req, res, next) => {
           res.status(200).json({
             userId: user._id,
             role: user.role,
+            email: user.email,
+            pseudo: user.pseudo,
             //fonction sign qui encode les données qu'on veut encoder avec clé d'encodage et expiration du token
             token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
               expiresIn: "24h",
@@ -55,3 +62,5 @@ exports.login = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+
+

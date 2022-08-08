@@ -7,4 +7,5 @@ const userCtrl = require("../controllers/user"); //associer les fonctions aux di
 router.post("/signup", password, userCtrl.signup);//appliquer la fonction à la route mais avant controle du mdp fort
 router.post("/login", userCtrl.login);
 
+
 module.exports = router;
