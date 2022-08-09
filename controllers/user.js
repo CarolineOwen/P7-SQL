@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {
           userId: user._id,
           pseudo: user.pseudo,
           //fonction sign qui encode les données qu'on veut encoder avec clé d'encodage et expiration du token
-          token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+          token: jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
             expiresIn: "24h"
           })
         }))
@@ -53,7 +53,7 @@ exports.login = (req, res, next) => {
             email: user.email,
             pseudo: user.pseudo,
             //fonction sign qui encode les données qu'on veut encoder avec clé d'encodage et expiration du token
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+            token: jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
               expiresIn: "24h",
             }),
           });

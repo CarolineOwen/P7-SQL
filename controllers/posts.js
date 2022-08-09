@@ -80,8 +80,8 @@ exports.deletePost = (req, res, next) => {
       //unlink permet de supprimer le fichier
       if (req.file) {
         const filename = post.imageUrl.split("/images")[1];
-        fs.unlink(`images/${filename}`)
-      }
+        fs.unlink(`images/${filename}`)}
+      
       //supprimer le fichier dans la base de données
       Post.deleteOne({ _id: req.params.id })
         .then(() => {
