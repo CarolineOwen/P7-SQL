@@ -70,21 +70,22 @@ exports.deletePost = (req, res, next) => {
       //if (post.userId != req.auth.userId) {
       // res.status(401).json({ message: "Non-autorisé" });} else
 
-
-      let data = {
-        comments: req.body.comments,
-        userId: req.auth.userId
-      }
       //recuperer le nom de fichier
-
+console.log(post.imageUrl);
       //unlink permet de supprimer le fichier
-      if (req.file) {
-        const filename = post.imageUrl.split("/images")[1];
-        fs.unlink(`images/${filename}`)}
+      
+        if (post.imageUrl) {
+          const filename = post.imageUrl.split("/images")[1];
+          fs.unlink(`images/${filename}`, (error) => console.log(error))
+        }
+
+
+
       
       //supprimer le fichier dans la base de données
       Post.deleteOne({ _id: req.params.id })
         .then(() => {
+          console.log(req.params.id)
           res.status(200).json({ message: "objet supprimé" });
         })
         .catch((error) => res.status(401).json({ error }));

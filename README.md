@@ -14,11 +14,15 @@ Un rôle d'administrateur permet de vérifier le contenu et d'agir sur les comme
 
 **1) Cloner le repository suivant dans un dossier de votre PC:**  
 https://github.com/CarolineOwen/P7.git  
+  -  
+  renommer le fichier .env.exemple en .env (le fichier est à la racine du projet) et remplacer les "xxxx" par votre identifiant et mot de passe MongoDB.
   
 
 **2) Exécuter "npm install" à la racine du projet (dans le terminal commande: "cd P7")**  
 
-**3) Lancer le server en éxécutant "node server" ou "nodemon server"**
+**3) Lancer le server en éxécutant "node server" ou "nodemon server"**  
+le serveur doit tourner sur le port 3000
+
 Pour cela il faut remplacer les variables d'environnement
 
 **4) Contrôle du bon fonctionnement de serveur: le terminal de commandes doit afficher:**  
