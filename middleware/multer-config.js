@@ -14,11 +14,15 @@ const storage = multer.diskStorage({
   },
   //quel nom de fichier utiliser
   filename: (req, file, callback) => {
+    
     //générer le nouveau nom du fichier
     const name = file.originalname.split(" ").join("_");
     const extension = MIME_TYPES[file.mimetype];
+    if (!extension){
+      callback("null")
+    }
     //date pour que chaque nom d'image soit unique, éviter les doublons
-    callback(null, name + Date.now() + "." + extension);
+    else{callback(null, name + Date.now() + "." + extension)};
   },
 });
 
