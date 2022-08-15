@@ -66,25 +66,24 @@ exports.deletePost = (req, res, next) => {
   //recupérer l'objet en base
   Post.findOne({ _id: req.params.id })
     .then((post) => {
+      
       //vérifier que c'est bien le userId qui veut supprimer l'image
       //if (post.userId != req.auth.userId) {
       // res.status(401).json({ message: "Non-autorisé" });} else
 
-      //recuperer le nom de fichier
-console.log(post.imageUrl);
       //unlink permet de supprimer le fichier
-      
-        if (post.imageUrl) {
-          const filename = post.imageUrl.split("/images")[1];
-          fs.unlink(`images/${filename}`, (error) => console.log(error))
-        }
+      if (post.imageUrl) {
+        const filename = post.imageUrl.split("/images")[1];
+        fs.unlink(`images/${filename}`, (error) => console.log(error))
+      }
 
-
-
-      
       //supprimer le fichier dans la base de données
       Post.deleteOne({ _id: req.params.id })
         .then(() => {
+          
+          // if ((post.userId != req.auth.userId) || req.auth.) {
+          //   res.status(401).json({ message: "Non-autorisé" });
+          // }
           console.log(req.params.id)
           res.status(200).json({ message: "objet supprimé" });
         })
@@ -109,11 +108,11 @@ exports.getAllPosts = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
+//fonction pour les likes et les dislikes
 exports.likesAndDislikes = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      //like = 1
-      //si le tableau est vide et que la requete on like alors on ajoute 1
+
       if (!post.usersLiked.includes(req.body.userId) && req.body.like === 1) {
         Post.updateOne(
           { _id: req.params.id },
@@ -125,7 +124,7 @@ exports.likesAndDislikes = (req, res, next) => {
           .then(() => res.status(201).json({ message: "like +1" }))
           .catch((error) => res.status(404).json({ error }));
       }
-      //like = 0
+
       if (post.usersLiked.includes(req.body.userId) && req.body.like === 1) {
         Post.updateOne(
           { _id: req.params.id },
@@ -137,7 +136,7 @@ exports.likesAndDislikes = (req, res, next) => {
           .then(() => res.status(201).json({ message: "like 0" }))
           .catch((error) => res.status(404).json({ error }));
       }
-      //like = -1
+
       if (
         !post.usersDisliked.includes(req.body.userId) &&
         req.body.like === -1
@@ -152,7 +151,7 @@ exports.likesAndDislikes = (req, res, next) => {
           .then(() => res.status(201).json({ message: "dislike 1" }))
           .catch((error) => res.status(404).json({ error }));
       }
-      //like = 0 après un like -1(enlever le dislike)
+
       if (
         post.usersDisliked.includes(req.body.userId) &&
         req.body.like === -1

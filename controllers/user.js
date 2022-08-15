@@ -18,6 +18,7 @@ exports.signup = (req, res, next) => {
         .then(() => res.status(201).json({
           userId: user._id,
           pseudo: user.pseudo,
+          role: user.role,
           //fonction sign qui encode les données qu'on veut encoder avec clé d'encodage et expiration du token
           token: jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
             expiresIn: "24h"

@@ -15,7 +15,7 @@ Un rôle d'administrateur permet de vérifier le contenu et d'agir sur les comme
 **1) Cloner le repository suivant dans un dossier de votre PC:**  
 https://github.com/CarolineOwen/P7.git  
   -  
-  renommer le fichier .env.exemple en .env (le fichier est à la racine du projet) et remplacer les "xxxx" par votre identifiant et mot de passe MongoDB.
+  Renommer le fichier ".env.exemple" en ".env" (le fichier est à la racine du projet) et remplacer les "xxxx" par votre identifiant et mot de passe MongoDB, ce qui assurera le lien avec la base de données.
   
 
 **2) Exécuter "npm install" à la racine du projet (dans le terminal commande: "cd P7")**  
