@@ -84,7 +84,6 @@ exports.deletePost = (req, res, next) => {
           // if ((post.userId != req.auth.userId) || req.auth.) {
           //   res.status(401).json({ message: "Non-autorisé" });
           // }
-          console.log(req.params.id)
           res.status(200).json({ message: "objet supprimé" });
         })
         .catch((error) => res.status(401).json({ error }));
