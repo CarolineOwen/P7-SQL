@@ -31,6 +31,10 @@ exports.modifyPost = (req, res, next) => {
   if (req.file) {
     Post.findOne({ _id: req.params.id })
       .then((objet) => {
+        if (objet.userId != req.auth.userId && req.auth.role != "admin") {
+          res.status(401).json({ message: "Non-autorisé" });
+          return;
+        }
         if (objet.imageUrl) {
           const filename = objet.imageUrl.split('/images')[1];
           fs.unlink(`images/${filename}`, (error) => {
@@ -66,10 +70,12 @@ exports.deletePost = (req, res, next) => {
   //recupérer l'objet en base
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      
+
       //vérifier que c'est bien le userId qui veut supprimer l'image
-      //if (post.userId != req.auth.userId) {
-      // res.status(401).json({ message: "Non-autorisé" });} else
+      if (post.userId != req.auth.userId && req.auth.role != "admin") {
+        res.status(401).json({ message: "Non-autorisé" });
+        return;
+      }
 
       //unlink permet de supprimer le fichier
       if (post.imageUrl) {
@@ -80,10 +86,6 @@ exports.deletePost = (req, res, next) => {
       //supprimer le fichier dans la base de données
       Post.deleteOne({ _id: req.params.id })
         .then(() => {
-          
-          // if ((post.userId != req.auth.userId) || req.auth.) {
-          //   res.status(401).json({ message: "Non-autorisé" });
-          // }
           res.status(200).json({ message: "objet supprimé" });
         })
         .catch((error) => res.status(401).json({ error }));

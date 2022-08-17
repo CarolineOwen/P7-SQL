@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     req.auth = {
       userId: userId,
+      role: decodedToken.role
     };
     next();
   } catch (error) {

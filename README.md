@@ -23,7 +23,7 @@ https://github.com/CarolineOwen/P7.git
 **3) Lancer le server en éxécutant "node server" ou "nodemon server"**  
 le serveur doit tourner sur le port 3000
 
-Pour cela il faut remplacer les variables d'environnement
+Pour cela il faut remplacer les variables d'environnement en renommant le fichier .env.example en .env et remplacer les "xxxx" par les valeurs communiquées dans le fichier texte.
 
 **4) Contrôle du bon fonctionnement de serveur: le terminal de commandes doit afficher:**  
 *Listening on port 3000*  
