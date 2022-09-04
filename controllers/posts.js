@@ -1,7 +1,7 @@
 const Post = require('../models/Post');
 const fs = require("fs");
 
-//fonction creer un post
+//fonction creer un post 2
 exports.createPost = (req, res, next) => {
   let data = {
     comments: req.body.comments,
